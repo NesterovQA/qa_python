@@ -27,13 +27,13 @@ class TestBooksCollector:
         book1 = BooksCollector()
         book1.add_new_book('Шерлок Холмс')
         book1.set_book_rating('Шерлок Холмс', 0)
-        assert book1.set_book_rating == {'Шерлок Холмс': 1}
+        assert book1.books_rating == {'Шерлок Холмс': 1}
 
     def test_set_book_raiting_meaning_more_than_ten(self):
         book2 = BooksCollector()
         book2.add_new_book('Мастер и Маргарита')
         book2.set_book_rating('Мастер и Маргарита', 11)
-        assert book2.set_book_rating == {'Мастер и Маргарита': 1}
+        assert book2.books_rating == {'Мастер и Маргарита': 1}
 
     def test_add_new_book_twice(self):
         boo = BooksCollector()
@@ -49,15 +49,12 @@ class TestBooksCollector:
 
     def test_get_books_with_specific_rating_rating_list_of_book(self):
         book4 = BooksCollector()
-        book5 = BooksCollector()
         book4.add_new_book('Город Грехов')
-        book5.add_new_book('Моя Борьба')
-        book6 = BooksCollector()
-        book6.add_new_book('Емеля')
+        book4.add_new_book('Моя Борьба')
         book4.set_book_rating('Город Грехов', 2)
-        book5.set_book_rating('Моя Борьба',2)
+        book4.set_book_rating('Моя Борьба',2)
         result = book4.get_books_with_specific_rating(2)
-        assert result == ['Город Грехов','Моя Борьба']
+        assert result == ['Город Грехов', 'Моя Борьба']
 
     def test_get_books_rating_empty_dictionary_show_empty_dictionary(self):
         dictionary = BooksCollector()
@@ -73,17 +70,20 @@ class TestBooksCollector:
     def test_add_book_in_favorites_books_in_rating(self):
         book7 = BooksCollector()
         book7.add_new_book('Маленький принц')
-        assert book7.add_book_in_favorites('Маленький принц') == ['Маленький принц']
+        book7.add_book_in_favorites('Маленький принц')
+        assert book7.favorites == ['Маленький принц']
 
     def test_add_book_in_favorites_books_not_in_rating(self):
         book8 = BooksCollector()
-        assert book8.add_book_in_favorites('Горе от ума') == []
+        book8.add_book_in_favorites('Горе от ума')
+        assert book8.favorites == []
 
     def test_add_book_in_favorites_books_in_rating_repeat(self):
         book9 = BooksCollector()
-        book10 = BooksCollector()
-        book10.add_new_book('История')
-        assert book9.add_book_in_favorites('История') and book10.add_book_in_favorites('История') == ['История']
+        book9.add_new_book('История')
+        book9.add_book_in_favorites('История')
+        book9.add_book_in_favorites('История')
+        assert book9.favorites == ['История']
 
     def test_delete_book_from_favorites_book_in_favorites(self):
         book11 = BooksCollector()
@@ -102,5 +102,5 @@ class TestBooksCollector:
     def test_add_new_book_book_is_miss_rating_empty(self):
         book13 = BooksCollector()
         book13.add_new_book('Как готовить дома')
-        rating = book13.get_books_rating('Такой книги нет в добавленных')
+        rating = book13.get_book_rating('Такой книги нет в добавленных')
         assert rating is None
